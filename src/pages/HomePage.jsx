@@ -1,20 +1,28 @@
 import "../components/Header.css";
 import "./HomePage.css";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Header } from "../components/Header";
-import { products } from "../../starting-code/data/products";
 import CheckmarkIcon from "../assets/images/icons/checkmark.png";
 
 export function HomePage() {
-  axios.get("http://localhost:3000/api/products").then((response) => {
-    console.log(response.data);
-  });
+  const [products, setproducts] = useState([]);
+  const [cart, setcart] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/products").then((response) => {
+      setproducts(response.data);
+    });
+
+    axios.get("http://localhost:3000/api/cart-items").then((response) => {
+      setcart(response.data);
+    });
+  }, []);
 
   return (
     <>
       <title> Ecommerce Project</title>
       <link rel="icon" type="image/svg+xml" href="/home-favicon.png" />
-      <Header />
+      <Header cart={cart} />
 
       <div className="home-page">
         <div className="products-grid">
